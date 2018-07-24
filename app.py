@@ -4,4 +4,4 @@ from resources import KijijiAds
 from db import app
 api = Api(app)
 
-api.add_resource(KijijiAds, '/<string:make>')
+api.add_resource(KijijiAds, '/make=<string:make>&model=<string:model>')
