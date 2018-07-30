@@ -15,15 +15,18 @@ carAd_cols = {
     'date_posted': CarAd.date_posted
 }
 class KijijiAds(Resource):
-    def get(self, make, model, page, order):
+    def get(self, make='', model='', page='1', order='make', order_type='ASC'):
         
         item_list = {}
-        
 
-        query = db.session.query(CarAd).filter_by(make = make, model= model).paginate(page=page, 
-        per_page=15, error_out=False).order_by(desc(carAd_cols[order]))
+        col_order = desc(carAd_cols[order])
+        if order_type == 'DESC':
+            col_order = desc(col_order)
 
-        for item in query.items:
+        query = db.session.query(CarAd).filter_by(make = make, model= model).order_by(col_order)
+        paginated_query = query.paginate(page=page, per_page=15, error_out=False)
+
+        for item in paginated_query.items:
             item_list[item.id] = {'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
              'mileage': item.mileage, 'price': item.price, 'location': item.location, 'full_name': item.full_name, 'description': item.description, 
              'date_posted': item.date_posted,'link': item.link }

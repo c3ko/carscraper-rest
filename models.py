@@ -1,5 +1,5 @@
 from db import db
-from sqlalchemy import desc
+
 class CarAd(db.Model):
     __table__  = db.Model.metadata.tables['car_ad']
 
