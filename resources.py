@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_restful import Resource
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 from db import db
 from models import CarAd
 import json
@@ -22,6 +22,8 @@ class KijijiAds(Resource):
         col_order = carAd_cols[order]
         if order_type == 'DESC':
             col_order = desc(col_order)
+        elif order_type == 'ASC':
+            col_order = asc(col_order)
 
         query = db.session.query(CarAd).filter_by(make = make, model= model).order_by(col_order)
         paginated_query = query.paginate(page=page, per_page=15, error_out=False)
