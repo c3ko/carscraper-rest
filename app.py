@@ -5,7 +5,7 @@ from resources import KijijiAds
 from db import app
 api = Api(app)
 
-api.add_resource(KijijiAds, '/make=<string:make>&model=<string:model>/page-<int:page>')
+api.add_resource(KijijiAds, '/make=<string:make>&model=<string:model>/page-<int:page>&orderBy=<string:order>')
 
 @app.after_request
 def after_request(response):
