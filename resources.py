@@ -19,7 +19,7 @@ class KijijiAds(Resource):
         
         item_list = {}
 
-        col_order = desc(carAd_cols[order])
+        col_order = carAd_cols[order]
         if order_type == 'DESC':
             col_order = desc(col_order)
 
