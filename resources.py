@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask_restful import Resource
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, distinct
 from db import db
 from models import CarAd
 import json
@@ -27,10 +27,13 @@ class KijijiAds(Resource):
 
         query = db.session.query(CarAd).filter_by(make = make, model= model).order_by(col_order)
         paginated_query = query.paginate(page=page, per_page=15, error_out=False)
-
+        item_list['pages'] = paginated_query.pages
+        item_list['page'] = paginated_query.page
+        item_list['total'] = paginated_query.total
         for item in paginated_query.items:
-            item_list[item.id] = {'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
+            item_list['list'][item.id] = {'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
              'mileage': item.mileage, 'price': item.price, 'location': item.location, 'full_name': item.full_name, 'description': item.description, 
              'date_posted': item.date_posted,'link': item.link }
         return jsonify(item_list)
 
+        
