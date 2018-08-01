@@ -30,11 +30,11 @@ class KijijiAds(Resource):
         item_list['pages'] = paginated_query.pages
         item_list['page'] = paginated_query.page
         item_list['total'] = paginated_query.total
-        item_list['list'] = {}
+        item_list['list'] = []
         for item in paginated_query.items:
-            item_list['list'][item.id] = {'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
+            item_list['list'].append({'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
              'mileage': item.mileage, 'price': item.price, 'location': item.location, 'full_name': item.full_name, 'description': item.description, 
-             'date_posted': item.date_posted,'link': item.link }
+             'date_posted': item.date_posted,'link': item.link})
         return jsonify(item_list)
 
         
