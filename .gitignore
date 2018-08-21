@@ -6,3 +6,4 @@ env3/
 .vscode/
 
 carscaper/car_scraper/scraped-cars.db
+carscraper/

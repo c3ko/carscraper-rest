@@ -37,4 +37,9 @@ class KijijiAds(Resource):
              'date_posted': item.date_posted,'link': item.link})
         return jsonify(item_list)
 
-        
+
+class SavedSearches(Resource):
+    def get(self, name):
+        pass
+    def put(self, name, date):
+        db.session.
