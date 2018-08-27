@@ -66,11 +66,13 @@ class SavedSearchesList(Resource):
         saved_search = SavedSearch(name=name, date=datetime.now(), num_saved=0)
         db.session.add(saved_search)
         db.session.commit()
+
+        return self.get()
         
 class SavedSearches(Resource):
 
 
-    def get(self, save_id=None):
+    def get(self, save_id):
         item_list = {}
         query = db.session.query(SavedSearch).filter_by(id=save_id)
         
@@ -81,19 +83,36 @@ class SavedSearches(Resource):
 
 
     def post(self):
+        item_list = {}
         name = request.form['name']
         saved_search = SavedSearch(name=name, date=datetime.now(), num_saved=0)
         db.session.add(saved_search)
         db.session.commit()
+        query = db.session.query(SavedSearch).all()
+
+        item_list['list'] = []
+        for item in query:
+            item_list['list'].append(all_columns(item))
+        return jsonify (item_list)
+
 
     def delete(self, save_id):
-        saved_search = db.session.query(SavedSearch).filter_by(id=save_id).first()
-        db.session.delete(saved_search)
+        item_list = {}
+        query = db.session.query(SavedSearch)
+        save_to_be_deleted= query.filter_by(id=save_id).first()
+        db.session.delete(save_to_be_deleted)
         db.session.commit()
+
+        
+        item_list['list'] = []
+        for item in query.all():
+            item_list['list'].append(all_columns(item))
+        return jsonify (item_list)
 
 class SavedCarsList(Resource):
 
     def post(self):
+        item_list = {}
         save_id, car_id = request.form['save_id'], request.form['car_id']        
         saved_car = SavedCar(save_id=save_id,car_id=car_id)
         db.session.add(saved_car)
@@ -104,13 +123,20 @@ class SavedCarsList(Resource):
         
         db.session.commit()
 
+        query = db.session.query(SavedCar).all()
+        item_list['list'] = []
+        for item in query:
+            item_list['list'].append(all_columns(item))
+        return jsonify (item_list)
+
+
 class SavedCars(Resource):
     # Get all saved cars for a particular save in paginated request
 
     def get(self, save_id):
         item_list = {}
-        query_save = db.session.query()
         query = db.session.query(CarAd).join(CarAd.saved_car_rel).filter(SavedCar.save_id == save_id)
+        item_list['save_id'] = save_id
         item_list['list'] = []
         for item in query:
             item_list['list'].append(all_columns(item))
@@ -118,6 +144,14 @@ class SavedCars(Resource):
 
 
     def delete(self, save_id):
-        saved_car = db.session.query(SavedSearch).filter_by(save_id=save_id).first()
+        item_list = {}
+        car_id = request.form['car_id']
+        saved_car = db.session.query(SavedCar).filter_by(save_id=save_id, car_id=car_id).first()
         db.session.delete(saved_car)
         db.session.commit()
+
+        query = db.session.query(CarAd).join(CarAd.saved_car_rel).all()
+        item_list['list'] = []
+        for item in query:
+            item_list['list'].append(all_columns(item))
+        return jsonify (item_list)
