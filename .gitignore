@@ -6,3 +6,30 @@ env3/
 .vscode/
 
 carscaper/car_scraper/scraped-cars.db
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+db.sqlite3
+*.db
+migrations/
+media/
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
