@@ -133,11 +133,25 @@ class SavedCarsList(Resource):
 class SavedCars(Resource):
     # Get all saved cars for a particular save in paginated request
 
-    def get(self, save_id):
+    def get(self, save_id, page='1', order_by='make', order_type='ASC'):
+        
+        
+        col_order = carAd_cols[order_by]
+        if order_type == 'DESC':
+            col_order = desc(col_order)
+        elif order_type == 'ASC':
+            col_order = asc(col_order)
+
         item_list = {}
-        query = db.session.query(CarAd).join(CarAd.saved_car_rel).filter(SavedCar.save_id == save_id)
+        query = db.session.query(CarAd).join(CarAd.saved_car_rel).filter(SavedCar.save_id == save_id).order_by(col_order)
+        paginated_query = query.paginate(page=page, per_page=15, error_out=False)
+        item_list['pages'] = paginated_query.pages
+        item_list['page'] = paginated_query.page
+        item_list['total'] = paginated_query.total
+
         item_list['save_id'] = save_id
         item_list['list'] = []
+
         for item in query:
             item_list['list'].append(all_columns(item))
         return jsonify (item_list)
