@@ -1,0 +1,6 @@
+flask-restful
+flask-sqlalchemy
+sqlalchemy
+scrapy
+
+
