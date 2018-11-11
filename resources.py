@@ -6,6 +6,7 @@ from models import CarAd, SavedSearch, SavedCar
 from datetime import datetime
 import json
 
+
 carAd_cols = {
     'make': CarAd.make,
     'model': CarAd.model,
@@ -24,11 +25,21 @@ def all_columns(row):
         result[col] = getattr(row, col)
     return result
 
-class Kijijiad(Resource):
-    def get(self, car_id):
-        pass
-
 class KijijiAdSearch(Resource):
+    def get(self):
+        item_list = {}
+        make = request.args.get('make')
+        model = request.args.get('model')
+        year = request.args.get('year')
+        query = db.session.query(CarAd).filter_by(make = make, model= model).order_by(carAd_cols['date_posted']).limit(300)
+        item_list['list'] = []
+        for item in query.all():
+            item_list['list'].append({'id': item.id, 'make': item.make, 'model': item.model, 'year': item.year, 'transmission': item.transmission,
+             'mileage': item.mileage, 'price': item.price, 'location': item.location, 'full_name': item.full_name, 'description': item.description, 
+             'date_posted': item.date_posted,'link': item.link})
+        return jsonify(item_list)
+
+class KijijiAdPaginatedSearch(Resource):
     def get(self, make='', model='', page='1', order='make', order_type='ASC'):
         
         item_list = {}
