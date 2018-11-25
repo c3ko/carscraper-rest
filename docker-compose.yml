@@ -5,12 +5,4 @@ services:
     volumes:
       - .:/opt/services/flaskapp/src
     ports:
-      - "8000:8000"
-  nginx:
-    build: nginx
-    ports:
-      - 80:80
-    volumes:
-      - ./config/nginx/conf.d:/etc/nginx/conf.d
-    depends_on:  
-      - flaskapp
+      - "5000:5000"
