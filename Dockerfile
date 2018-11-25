@@ -4,13 +4,13 @@ RUN mkdir -p /opt/services/flaskapp/src
 
 WORKDIR /opt/services/flaskapp/src
 
-COPY requirements.txt requirements.txt
+COPY requirements_freeze.txt requirements_freeze.txt
 
 RUN apk add -U --no-cache gcc build-base linux-headers \
     ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
 RUN apk add sqlite
 RUN python -m venv env
-RUN env/bin/pip3 install -r requirements.txt
+RUN env/bin/pip3 install -r requirements_freeze.txt
 RUN env/bin/pip3 install gunicorn
 
 
